@@ -76,7 +76,7 @@ ${content.slice(1).map(i=>`        ${i.join(" & ")}`).join("\n")}
 markdown=`
 |${content[0].join(" | ")}|
 ${"|:---:".repeat(c.columns)}|
-${content.slice(1).map(i=>`|${i.join(" | ")}|`).join("\n")}
+${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
 `.trimStart();
   }
   return(<Row gutter={16}>
