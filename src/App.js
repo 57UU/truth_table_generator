@@ -3,7 +3,8 @@ import { AudioOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import GetLatex from './GetLatex';
 import "./App.css"
-
+import 'katex/dist/katex.min.css';
+import TeX from '@matejmazur/react-katex';
 
 const horizon={ display: 'flex', justifyContent: 'space-between', width: '100%' }
 const { Search } = Input;
@@ -50,31 +51,43 @@ function App() {
     </div>
   );
 }
+const error="请输入或输入有误"
 function generateTable(c){
   let tableLatex;
+  let markdown;
   let content;
   if(c==undefined) {
-    tableLatex="请输入或输入有误"
-    content="请输入或输入有误"
+    tableLatex=error
+    markdown=error
   }else{
     content=c.content
-    let contentList=content.split("\n")
 tableLatex=String.raw`
 \begin{table}[H]
     \centering
     \begin{tabular}{${"|c".repeat(c.columns)}|}
         \toprule[1.5pt]
-        ${contentList[0]}
+        ${content[0].join(" & ")}
         \hline
-${contentList.slice(1).map(i=>`        ${i}`).join("\n")}
+${content.slice(1).map(i=>`        ${i.join(" & ")}`).join("\n")}
         \bottomrule[1.5pt]
     \end{tabular}
 \end{table}
 `.trimStart()
+markdown=`
+|${content[0].join(" | ")}|
+${"|:---:".repeat(c.columns)}|
+${content.slice(1).map(i=>`${i.join(" | ")}`).join("\n")}
+`.trimStart();
   }
-  return(<>
-  {getLatexBlock(tableLatex,"带有表格的LaTeX Code")}
-  </>
+  return(<Row gutter={16}>
+    <Col span={12}>
+    {getLatexBlock(markdown,"Markdown Code")}
+    {getRenderBlock(content)}
+    </Col>
+    <Col span={12}>
+    {getLatexBlock(tableLatex,"LaTeX Code")}
+    </Col>
+  </Row>
   )
 }
 let lastExpression=undefined;
@@ -102,16 +115,36 @@ function getLatexBlock(c,title="LaTeX Code"){
     });
   }
   return(<div style={{padding:"1rem 0 0 0"}}>
-    <div style={horizon}>
-      <p>{title}</p>
-      <Button type='primary' onClick={copy}>Copy</Button>
-    </div>
+    <Card style={{body:{ padding: 0 }}} title={
+      <div style={horizon}>
+        <div >{title}</div>
+        <Button type='primary' style={{width:100}} onClick={copy} size="middle">Copy</Button>
+      </div>
+      }>
     <pre>
     <code>
         {c}
       </code>
     </pre>
+    </Card>
+
     </div>)
+}
+function getRenderBlock(content){
+  let inner=error;
+  if(content!=undefined){
+    inner=(<table align="center" valign="center">
+      <thead>
+        <tr>{content[0].map(e=><th><TeX math={e.replaceAll("$","")} /></th>)}</tr>
+      </thead>
+      <tbody align="center" valign="center">
+        {content.slice(1).map(i=><tr>{i.map(j=><td>{j}</td>)}</tr>)}
+      </tbody>
+    </table>)
+  }
+  return(<Card title="HTML & KaTeX Render">
+    {inner}
+  </Card>)
 }
 const manual=[
   '非：~ 或 !',
@@ -124,11 +157,15 @@ const manual=[
 
 function getManual(){
   return (
-    <Card title="说明" bordered={true}
+    <Card 
+    title="说明"
+     bordered={true}
      style={{ 
       width: 300 ,
       backgroundColor: 'green', // Ant Design的蓝色调
       fontSize: '1rem', 
+      body:{ padding: 0 }, // 移除Card内部padding
+      fontWeight: 'bold', // 加粗文字
       }}>
     <p>{manual.map(e=><div>{e}</div>)}</p>
   </Card>
@@ -138,17 +175,32 @@ function getBanner(text){
   return ( <Card
   style={{
     width:"100%",
-    textAlign: 'center',
     backgroundColor: '#1890ff', // Ant Design的蓝色调
+    color: '#fff', // 白色文字
+    margin:"0 0 0 0.5rem",
+    body:{ padding: 0 } // 移除Card内部padding
+  }}
+><div style={{height:"13rem",textAlign:"center",}}>
+  <div style={{
+    textAlign: 'center',
+    display:"flex",
+    justifyContent:"center",
+    alignItems: 'center',
     color: '#fff', // 白色文字
     fontSize: '2rem', // 你可以根据需要调整字体大小
     fontWeight: 'bold', // 加粗文字
-    padding: '6rem 0', // 内边距调整
-    margin:"0 0 0 0.5rem"
-  }}
-  bodyStyle={{ padding: 0 }} // 移除Card内部padding
->
-  {text}
+    padding:"4rem 0",
+    margin:"0 0 0 0.5rem",
+  }}>
+    {text}
+  </div>
+  <div style={{textAlign:"end",fontsize:'2rem',padding:"1rem 0"}}>
+    <a href="https://github.com/57UU/truth_table_generator" style={{color:"white",fontsize:"2rem"}}>
+    <div style={{color:"white",fontsize:"2rem"}}><u>GitHub/Source Code</u></div>
+    </a>
+    </div>
+</div>
+
 </Card>)
 }
 

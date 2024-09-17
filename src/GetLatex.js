@@ -1,5 +1,5 @@
 function GetLatex(str){
-    str=str.replace("!","~").replace("+","|").replace("*","&").replace("！","~").replace("（","(").replace("）",")")
+    str=str.replaceAll("!","~").replaceAll("+","|").replaceAll("*","&").replaceAll("！","~").replaceAll("（","(").replaceAll("）",")")
     str=[...str]
     verify(str)
     const varibles=getVaribles(str)
@@ -24,29 +24,25 @@ function GetLatex(str){
     recorder.sort(function(a,b){return b.layer-a.layer})
 
     let rows=[]
-    let top=""
     let _a=varibles.map(c=>`\$${c}\$`)
     let _b=recorder.map(ele=>`\$${convert2latex(ele.infix)}\$`)
     let all=_a.concat(_b)
-    top+=all.join(" & ")
-    rows.push(top)
+    rows.push(all)
     for(let i=0;i<contexts.length;i++){
-      let row=""
       let a1=varibles.map(v=>`${contexts[i][v]?1:0}`)
       let a2=recorder.map(ele=>`${ele.table[i]?1:0}`)
       let all=a1.concat(a2)
-      row+=all.join(" & ")
-      rows.push(row)
+      rows.push(all)
     }
 
-    const content= rows.join("\\\\ \n")+"\\\\"
+    //const content= rows.join("\\\\ \n")+"\\\\"
     return {
-      content:content,
+      content:rows,
       columns:varibles_num+recorder.length
     }
 }
 function convert2latex(str){
-  str=str.replace("&"," \\land ").replace("|"," \\lor ").replace(">"," \\rightarrow ").replace("="," \\leftrightarrow ").replace("~"," \\sim ")
+  str=str.replaceAll("&"," \\land ").replaceAll("|"," \\lor ").replaceAll(">"," \\rightarrow ").replaceAll("="," \\leftrightarrow ").replaceAll("~"," \\sim ")
   return str
 }
 function verify(list){
