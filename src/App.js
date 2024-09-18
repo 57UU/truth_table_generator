@@ -39,7 +39,7 @@ function App() {
         }}
         value={expression}
         onChange={handleChange}
-        addonBefore="键入数学表达式"
+        addonBefore="键入表达式"
         placeholder="input expression"
         allowClear
         onSearch={setDefault}
@@ -76,7 +76,7 @@ ${content.slice(1).map(i=>`        ${i.join(" & ")}`).join("\n")}
 markdown=`
 |${content[0].join(" | ")}|
 ${"|:---:".repeat(c.columns)}|
-${content.slice(1).map(i=>`${i.join(" | ")}`).join("\n")}
+${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
 `.trimStart();
   }
   return(<Row gutter={16}>

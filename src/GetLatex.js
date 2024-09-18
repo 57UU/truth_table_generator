@@ -109,7 +109,7 @@ function infix2postfix(exp){
           top=op_stack.pop()
         }
       }else{
-        while(!op_stack.isEmpty()&&prec[op_stack.peek()>=prec[element]]){
+        while(!op_stack.isEmpty()&&prec[op_stack.peek()]>=prec[element]){
           postfix.push(op_stack.pop());
         }
         op_stack.push(element)
@@ -161,7 +161,7 @@ class AstNode{
         }
       }else{//双操作符
         const left=prec[this.op]>prec[this.ele1.op]?`(${this.ele1.getInfix()})`:this.ele1.getInfix()
-        const right=prec[this.op]>prec[this.ele2.op]?`(${this.ele2.getInfix()})`:this.ele2.getInfix()
+        const right=prec[this.op]>=prec[this.ele2.op]?`(${this.ele2.getInfix()})`:this.ele2.getInfix()
         this.infix=left+this.op+right
       }
     }
