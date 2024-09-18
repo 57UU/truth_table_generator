@@ -51,14 +51,14 @@ function App() {
     </div>
   );
 }
-const error="请输入或输入有误"
+const errorMessage="请输入或输入有误"
 function generateTable(c){
   let tableLatex;
   let markdown;
   let content;
   if(c==undefined) {
-    tableLatex=error
-    markdown=error
+    tableLatex=errorMessage
+    markdown=errorMessage
   }else{
     content=c.content
 tableLatex=String.raw`
@@ -81,13 +81,15 @@ ${content.slice(1).map(i=>`${i.join(" | ")}`).join("\n")}
   }
   return(<Row gutter={16}>
     <Col span={12}>
-    {getLatexBlock(markdown,"Markdown Code")}
+    {getLatexBlock(markdown,"Markdown")}
     {getRenderBlock(content)}
     </Col>
     <Col span={12}>
-    {getLatexBlock(tableLatex,"LaTeX Code")}
+    {getLatexBlock(tableLatex,"LaTeX")}
     </Col>
+    
   </Row>
+  
   )
 }
 let lastExpression=undefined;
@@ -131,9 +133,32 @@ function getLatexBlock(c,title="LaTeX Code"){
     </div>)
 }
 function getRenderBlock(content){
-  let inner=error;
+  let inner=errorMessage;
+  const handleCopy = async() => {
+    try {
+      // 获取表格 HTML
+      const tableElement = document.getElementById('table1');
+      const tableHTML = tableElement.outerHTML;
+
+      // 将 HTML 和纯文本数据打包到 Blob 中
+      const blob = new Blob([tableHTML], { type: 'text/html' });
+      const dataTransfer = new DataTransfer();
+      dataTransfer.setData('text/html', tableHTML);
+      dataTransfer.setData('text/plain', tableHTML); // 也可以提供纯文本版本
+
+      await navigator.clipboard.write([
+          new ClipboardItem({
+              'text/html': blob,
+              'text/plain': new Blob([tableHTML], { type: 'text/plain' })
+          })
+      ]);
+      message.success('表格已复制到剪贴板！');
+    } catch (error) {
+        message.error('复制失败，请重试！');
+    }
+  };
   if(content!=undefined){
-    inner=(<table align="center" valign="center">
+    inner=(<table id="table1" align="center" valign="center">
       <thead>
         <tr>{content[0].map(e=><th><TeX math={e.replaceAll("$","")} /></th>)}</tr>
       </thead>
@@ -142,7 +167,12 @@ function getRenderBlock(content){
       </tbody>
     </table>)
   }
-  return(<Card title="HTML & KaTeX Render">
+  return(<Card title={
+  <div style={horizon}>
+    <div >Word</div>
+    <Button type='primary' style={{width:100}} onClick={handleCopy} size="middle">Copy</Button>
+  </div>
+  }>
     {inner}
   </Card>)
 }
