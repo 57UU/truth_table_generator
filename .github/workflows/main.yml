@@ -4,6 +4,7 @@
 name: Node.js CI
 
 on:
+  workflow_dispatch: 
   push:
     branches: [ "master" ]
     paths-ignore:   # 下列文件的变更不触发部署，可以自行添加
@@ -33,6 +34,13 @@ jobs:
         submodules: recursive
     - name: Setup Node.js environment
       uses: actions/setup-node@v4.0.0
+    - name: Cache NPM dependencies
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.OS }}-npm-cache
+        restore-keys: |
+          ${{ runner.OS }}-npm-cache
     - run: npm ci
     - run: CI=false npm run build
     - name: Upload Pages artifact
