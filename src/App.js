@@ -5,7 +5,7 @@ import GetLatex from './GetLatex';
 import "./App.css"
 import 'katex/dist/katex.min.css';
 import TeX from '@matejmazur/react-katex';
-
+const {  Text, Link } = Typography;
 const horizon={ display: 'flex', justifyContent: 'space-between', width: '100%' }
 const { Search } = Input;
 function App() {
@@ -81,7 +81,7 @@ ${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
   return(<Row gutter={16}>
     <Col span={12}>
     {getLatexBlock(markdown,"Markdown")}
-    {getRenderBlock(content)}
+    {RenderBlock(content)}
     </Col>
     <Col span={12}>
     {getLatexBlock(tableLatex,"LaTeX")}
@@ -123,15 +123,18 @@ function getLatexBlock(c,title="Code"){
       </div>
       }>
     <pre>
-    <code>
+    <Text code>
         {c}
-      </code>
+      </Text>
     </pre>
     </Card>
 
     </div>)
 }
-function getRenderBlock(content){
+const wordExplain=()=>{
+  alert("Word公式说明\n\n先将表格复制到Word里面\n选择表格，按下Alt+=\n在‘公式’选项卡中选择‘LaTeX’\n按下Ctrl+=渲染LaTeX公式")
+}
+function RenderBlock(content){
   let inner=errorMessage;
   const handleCopy = () => {
     try {
@@ -167,14 +170,43 @@ function getRenderBlock(content){
       </tbody>
     </table>)
   }
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
   return(<Card title={
   <div style={horizon}>
     <div >Word Table(Beta)</div>
-    <Button type='primary' id="word_copy" onClick={handleCopy} style={{width:100}}  size="middle">Copy</Button>
+    <div >
+      <Row gutter={16}>
+        <Col span="12">
+        <Button type='primary'  onClick={showModal} style={{width:100}}  size="middle">Explain</Button>
+        </Col>
+        <Col span="12">
+        <Button type='primary' id="word_copy" onClick={handleCopy} style={{width:100}}  size="middle">Copy</Button>
+        </Col>
+      </Row>
+      
+      
+    </div>
+    
   </div>
   }>
     {inner}
+    <Modal title="Word公式说明" open={isModalOpen} onOk={handleOk} onCancel={handleOk} 
+    footer={[
+      <Button key="OK" type="primary"  onClick={handleOk}>
+            OK
+          </Button>,
+    ]}>
+        <p>先将表格复制到Word里面</p>
+        <p>选择表格，按下<Text keyboard>Alt</Text> + <Text keyboard>=</Text></p>
+        <p>在‘公式’选项卡中选择‘LaTeX’</p>
+        <p>按下<Text keyboard>Ctrl</Text> + <Text keyboard>=</Text>渲染LaTeX公式</p>
+      </Modal>
   </Card>)
 }
 const manual=[

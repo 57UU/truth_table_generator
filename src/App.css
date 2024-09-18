@@ -12,15 +12,16 @@ code {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Ant Design 的阴影效果 */
 }
 
-  /* 设置单元格间距 */
-  th, td {
-    padding: 10px; /* 设置单元格内边距 */
-  }
-  /* 如果需要，可以设置仅横线的样式 */
-  tr {
-    border-bottom: 2px solid black; /* 增加横线粗细 */
-  }
-  /* 去除表格最后一行的横线 */
-  tr:last-child {
-    border-bottom: none;
-  }
+
+/* 设置单元格间距 */
+th, td {
+  padding: 10px; /* 设置单元格内边距 */
+}
+/* 如果需要，可以设置仅横线的样式 */
+tr {
+  border-bottom: 2px solid black; /* 增加横线粗细 */
+}
+/* 去除表格最后一行的横线 */
+tr:last-child {
+  border-bottom: none;
+}
