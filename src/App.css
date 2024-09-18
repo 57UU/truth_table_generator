@@ -25,3 +25,14 @@ tr {
 tr:last-child {
   border-bottom: none;
 }
+
+.githublink{
+  font-size: 1rem;
+  font-weight: bold;
+  transition-duration: 100ms;
+}
+
+.githublink:hover{
+  color: #fff;
+  transition-duration: 100ms;
+}

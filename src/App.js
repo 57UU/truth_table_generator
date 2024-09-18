@@ -5,6 +5,8 @@ import GetLatex from './GetLatex';
 import "./App.css"
 import 'katex/dist/katex.min.css';
 import TeX from '@matejmazur/react-katex';
+import ReactDOMServer from 'react-dom/server'; 
+
 const {  Text, Link } = Typography;
 const horizon={ display: 'flex', justifyContent: 'space-between', width: '100%' }
 const { Search } = Input;
@@ -144,7 +146,16 @@ function RenderBlock(content){
         message.warning(errorMessage)
         return
       }
-      const tableHTML = tableElement.outerHTML;
+      const t=(
+        <table id="table1" align="center" valign="center" style={{ width: "100%",borderCollapse: "collapse",border:"1px solid black"}}>
+          <thead>
+            <tr>{content[0].map(e=><th style={{border:"1px solid black"}}>{e}</th>)}</tr>
+          </thead>
+          <tbody align="center" valign="center">
+            {content.slice(1).map(i=><tr>{i.map(j=><td style={{border:"1px solid black",textAlign:"center"}}>{j}</td>)}</tr>)}
+          </tbody>
+        </table>)
+      const tableHTML = ReactDOMServer.renderToStaticMarkup(t);
       navigator.clipboard.write([
           new ClipboardItem({
               'text/html': new Blob([tableHTML], { type: 'text/html' }),
@@ -163,7 +174,7 @@ function RenderBlock(content){
     inner=(
     <table id="table1" align="center" valign="center" style={{ width: "100%",borderCollapse: "collapse",border:"1px solid black"}}>
       <thead>
-        <tr>{content[0].map(e=><th style={{border:"1px solid black"}}>{e}</th>)}</tr>
+        <tr>{content[0].map(e=><th style={{border:"1px solid black"}}><TeX block>{e.replaceAll("$","")}</TeX></th>)}</tr>
       </thead>
       <tbody align="center" valign="center">
         {content.slice(1).map(i=><tr>{i.map(j=><td style={{border:"1px solid black",textAlign:"center"}}>{j}</td>)}</tr>)}
@@ -177,22 +188,20 @@ function RenderBlock(content){
   const handleOk = () => {
     setIsModalOpen(false);
   };
+  
   return(<Card title={
   <div style={horizon}>
     <div >Word Table(Beta)</div>
     <div >
       <Row gutter={16}>
         <Col span="12">
-        <Button type='primary'  onClick={showModal} style={{width:100}}  size="middle">Explain</Button>
+        <Button type='primary'  onClick={showModal} style={{width:100}}  size="middle">Note</Button>
         </Col>
         <Col span="12">
         <Button type='primary' id="word_copy" onClick={handleCopy} style={{width:100}}  size="middle">Copy</Button>
         </Col>
       </Row>
-      
-      
     </div>
-    
   </div>
   }>
     {inner}
@@ -203,9 +212,9 @@ function RenderBlock(content){
           </Button>,
     ]}>
         <p>先将表格复制到Word里面</p>
-        <p>选择表格，按下<Text keyboard>Alt</Text> + <Text keyboard>=</Text></p>
+        <p>选择表格，按下<Text keyboard>Alt</Text> + <Text keyboard>=</Text>将其转换为公式</p>
         <p>在‘公式’选项卡中选择‘LaTeX’</p>
-        <p>按下<Text keyboard>Ctrl</Text> + <Text keyboard>=</Text>渲染LaTeX公式</p>
+        <p>按下<Text keyboard>Ctrl</Text> + <Text keyboard>=</Text>渲染 <TeX>\LaTeX</TeX> 公式</p>
       </Modal>
   </Card>)
 }
@@ -225,7 +234,7 @@ function getManual(){
      bordered={true}
      style={{ 
       width: 300 ,
-      backgroundColor: 'green', // Ant Design的蓝色调
+      backgroundColor: '#1677ff', 
       fontSize: '1rem', 
       body:{ padding: 0 }, // 移除Card内部padding
       fontWeight: 'bold', // 加粗文字
@@ -238,7 +247,7 @@ function getBanner(text){
   return ( <Card
   style={{
     width:"100%",
-    backgroundColor: '#1890ff', // Ant Design的蓝色调
+    backgroundColor: '#a0d911', // Ant Design的蓝色调
     color: '#fff', // 白色文字
     margin:"0 0 0 0.5rem",
     body:{ padding: 0 } // 移除Card内部padding
@@ -249,7 +258,6 @@ function getBanner(text){
     display:"flex",
     justifyContent:"center",
     alignItems: 'center',
-    color: '#fff', // 白色文字
     fontSize: '2rem', // 你可以根据需要调整字体大小
     fontWeight: 'bold', // 加粗文字
     padding:"4rem 0",
@@ -258,9 +266,9 @@ function getBanner(text){
     {text}
   </div>
   <div style={{textAlign:"end",fontsize:'2rem',padding:"1rem 0"}}>
-    <a href="https://github.com/57UU/truth_table_generator" style={{color:"white",fontsize:"2rem"}}>
-    <div style={{color:"white",fontsize:"2rem"}}><u>GitHub/Source Code</u></div>
-    </a>
+    <Link href="https://github.com/57UU/truth_table_generator" >
+    <u className='githublink'>GitHub/Source Code</u>
+    </Link>
     </div>
 </div>
 
