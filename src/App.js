@@ -1,4 +1,4 @@
-import { Button,Input,Card,Typography, Alert,message, Space,Row,Col }  from 'antd';
+import { Button,Input,Card,Typography, Alert,message, Space,Row,Col,Modal }  from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import GetLatex from './GetLatex';
@@ -14,7 +14,6 @@ function App() {
   const handleChange = (e) => {
     setExpresion(e.target.value.toUpperCase());
   };
-  
 
   return (
     <div className="App" style={{width:"100%"}}>
@@ -106,7 +105,7 @@ function handleExpression(str) {
       return undefined;
     }
 }
-function getLatexBlock(c,title="LaTeX Code"){
+function getLatexBlock(c,title="Code"){
   const copy=()=>{
     navigator.clipboard.writeText(c).then(() => {
       // 成功复制后，可以在这里添加一些反馈，比如弹窗或者状态消息
@@ -134,43 +133,45 @@ function getLatexBlock(c,title="LaTeX Code"){
 }
 function getRenderBlock(content){
   let inner=errorMessage;
-  const handleCopy = async() => {
+  const handleCopy = () => {
     try {
       // 获取表格 HTML
       const tableElement = document.getElementById('table1');
+      if(tableElement==undefined) {
+        message.warning(errorMessage)
+        return
+      }
       const tableHTML = tableElement.outerHTML;
-
-      // 将 HTML 和纯文本数据打包到 Blob 中
-      const blob = new Blob([tableHTML], { type: 'text/html' });
-      const dataTransfer = new DataTransfer();
-      dataTransfer.setData('text/html', tableHTML);
-      dataTransfer.setData('text/plain', tableHTML); // 也可以提供纯文本版本
-
-      await navigator.clipboard.write([
+      navigator.clipboard.write([
           new ClipboardItem({
-              'text/html': blob,
-              'text/plain': new Blob([tableHTML], { type: 'text/plain' })
+              'text/html': new Blob([tableHTML], { type: 'text/html' }),
+              //'text/plain': new Blob([tableHTML], { type: 'text/plain' })
           })
-      ]);
-      message.success('表格已复制到剪贴板！');
+      ]).then(
+        ()=>{message.success('表格已复制到剪贴板！');}
+      ).catch(
+        err=>{message.error(`复制失败:${err}`);}
+      );
     } catch (error) {
-        message.error('复制失败，请重试！');
+      message.error('复制失败，请重试！');
     }
   };
   if(content!=undefined){
-    inner=(<table id="table1" align="center" valign="center">
+    inner=(
+    <table id="table1" align="center" valign="center" style={{ width: "100%",borderCollapse: "collapse",border:"1px solid black"}}>
       <thead>
-        <tr>{content[0].map(e=><th><TeX math={e.replaceAll("$","")} /></th>)}</tr>
+        <tr>{content[0].map(e=><th style={{border:"1px solid black"}}>{e}</th>)}</tr>
       </thead>
       <tbody align="center" valign="center">
-        {content.slice(1).map(i=><tr>{i.map(j=><td>{j}</td>)}</tr>)}
+        {content.slice(1).map(i=><tr>{i.map(j=><td style={{border:"1px solid black",textAlign:"center"}}>{j}</td>)}</tr>)}
       </tbody>
     </table>)
   }
+  
   return(<Card title={
   <div style={horizon}>
-    <div >Word</div>
-    <Button type='primary' style={{width:100}} onClick={handleCopy} size="middle">Copy</Button>
+    <div >Word Table(Beta)</div>
+    <Button type='primary' id="word_copy" onClick={handleCopy} style={{width:100}}  size="middle">Copy</Button>
   </div>
   }>
     {inner}

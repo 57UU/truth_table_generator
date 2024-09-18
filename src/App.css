@@ -12,15 +12,6 @@ code {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Ant Design 的阴影效果 */
 }
 
-  /* 设置表格边框和间距 */
-  table {
-    width: 100%; /* 你可以根据需要调整表格宽度 */
-    border-collapse: collapse; /* 边框合并，如果没有这个属性，边框会是双线的 */
-  }
-  /* 设置表格边框样式 */
-  table, th, td {
-    border: 1px solid black; /* 设置边框样式和颜色 */
-  }
   /* 设置单元格间距 */
   th, td {
     padding: 10px; /* 设置单元格内边距 */

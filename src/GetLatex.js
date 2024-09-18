@@ -137,7 +137,12 @@ function postfix2ast(exp){
       stack.push(ele_new)
     }
   }
-  return stack.pop()
+  const peek= stack.pop()
+  if(stack.isEmpty()){
+    return peek
+  }else{
+    throw new SyntaxError()
+  }
 }
 class AstNode{
   constructor(op,ele1,ele2){
