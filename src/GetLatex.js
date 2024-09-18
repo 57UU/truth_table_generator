@@ -109,7 +109,7 @@ function infix2postfix(exp){
           top=op_stack.pop()
         }
       }else{
-        while(!op_stack.isEmpty()&&prec[op_stack.peek()>=prec[element]]){
+        while(!op_stack.isEmpty()&&prec[op_stack.peek()]>=prec[element]){
           postfix.push(op_stack.pop());
         }
         op_stack.push(element)
