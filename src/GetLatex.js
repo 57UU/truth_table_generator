@@ -161,7 +161,7 @@ class AstNode{
         }
       }else{//双操作符
         const left=prec[this.op]>prec[this.ele1.op]?`(${this.ele1.getInfix()})`:this.ele1.getInfix()
-        const right=prec[this.op]>prec[this.ele2.op]?`(${this.ele2.getInfix()})`:this.ele2.getInfix()
+        const right=prec[this.op]>=prec[this.ele2.op]?`(${this.ele2.getInfix()})`:this.ele2.getInfix()
         this.infix=left+this.op+right
       }
     }
