@@ -14,7 +14,7 @@ function App() {
   const [expression,setExpresion]=useState("")
   const setDefault = (value, _e, info) => setExpresion("(P&Q)|R");
   const handleChange = (e) => {
-    setExpresion(e.target.value.toUpperCase());
+    setExpresion(e.target.value);
   };
 
   return (
@@ -100,7 +100,7 @@ function handleExpression(str) {
       return lastValue;
     }
     try{
-      lastValue= GetLatex(str)
+      lastValue= GetLatex(str.toUpperCase())
       lastExpression=str
       return lastValue;
     }catch(err){
