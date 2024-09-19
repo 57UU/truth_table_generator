@@ -9,7 +9,13 @@ code {
   font-size: 14px;
   line-height: 1.5;
   overflow-x: auto; /* 如果代码过长，允许水平滚动 */
+  overflow-y: auto; /* 如果代码过长，允许水平滚动 */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Ant Design 的阴影效果 */
+  height: 10rem;
+}
+
+
+.card-title{
 }
 
 

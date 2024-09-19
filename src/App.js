@@ -10,6 +10,9 @@ import ReactDOMServer from 'react-dom/server';
 const {  Text, Link } = Typography;
 const horizon={ display: 'flex', justifyContent: 'space-between', width: '100%' }
 const { Search } = Input;
+
+const isHoverCard=true;
+
 function App() {
   const [expression,setExpresion]=useState("")
   const setDefault = (value, _e, info) => setExpresion("(P&Q)|R");
@@ -85,8 +88,8 @@ ${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
     {RenderBlock(content)}
     </Col>
     <Col span={8}>
-    {getLatexBlock(markdown,"Markdown")}
-    {getLatexBlock(tableLatex,"LaTeX")}
+    {CodeBlock(markdown,"Markdown")}
+    {CodeBlock(tableLatex,"LaTeX")}
     </Col>
     
   </Row>
@@ -107,8 +110,9 @@ function handleExpression(str) {
       return undefined;
     }
 }
+function doNothing(){}
 const topPadding={padding:"1rem 0 0 0"}
-function getLatexBlock(c,title="Code"){
+function CodeBlock(c,title="Code"){
   const copy=()=>{
     navigator.clipboard.writeText(c).then(() => {
       // 成功复制后，可以在这里添加一些反馈，比如弹窗或者状态消息
@@ -119,14 +123,14 @@ function getLatexBlock(c,title="Code"){
     });
   }
   return(<div style={topPadding}>
-    <Card style={{body:{ padding: 0 }}} title={
-      <div style={horizon}>
+    <Card hoverable={isHoverCard} onClick={copy} style={{body:{ padding: 0 },}}title={
+      <div className="card-title" style={horizon}>
         <div >{title}</div>
-        <Button type='primary' style={{width:100}} onClick={copy} size="middle">Copy</Button>
+        <Button type='primary' style={{width:100}} onClick={doNothing} size="middle">Copy</Button>
       </div>
       }>
     <pre>
-    <Text code>
+    <Text code style={{height: '30rem' }}>
         {c}
       </Text>
     </pre>
@@ -190,8 +194,8 @@ function RenderBlock(content){
     setIsModalOpen(false);
   };
   
-  const card=(<Card title={
-  <div style={horizon}>
+  const card=(<Card hoverable={isHoverCard} onClick={doNothing} title={
+  <div className='card-title' style={horizon}>
     <div >Word Table(Beta)</div>
     <div >
       <Row gutter={16}>
