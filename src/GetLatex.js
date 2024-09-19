@@ -16,7 +16,9 @@ function GetLatex(str){
       let values=[...parseInt(i).toString(2)]
       var hashmap = new Map();
       for(let j=0;j<varibles_num;j++){
-        hashmap[varibles[j]]=values[j]=='1'
+        const offset= varibles_num-values.length//可能列表不够长
+        let v=values[j-offset]
+        hashmap[varibles[j]]=!(v==undefined ||v==0)//可能列表不够长
       }
       contexts.push(hashmap)
     }
