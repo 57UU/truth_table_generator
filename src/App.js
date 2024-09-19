@@ -67,9 +67,9 @@ tableLatex=String.raw`
     \centering
     \begin{tabular}{${"|c".repeat(c.columns)}|}
         \toprule[1.5pt]
-        ${content[0].join(" & ")}
+        ${content[0].join(" & ")}\\
         \hline
-${content.slice(1).map(i=>`        ${i.join(" & ")}`).join("\n")}
+${content.slice(1).map(i=>`        ${i.join(" & ")}`).join("\\\\\n")}\\
         \bottomrule[1.5pt]
     \end{tabular}
 \end{table}
