@@ -1,7 +1,5 @@
 code {
   display: block;
-  padding: 16px;
-  margin: 16px 0;
   background-color: #f0f2f5; /* Ant Design 的背景色 */
   color: #314659; /* Ant Design 的文字颜色 */
   border-radius: 4px; /* Ant Design 的圆角大小 */
