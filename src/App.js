@@ -81,11 +81,11 @@ ${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
 `.trimStart();
   }
   return(<Row gutter={16}>
-    <Col span={12}>
-    {getLatexBlock(markdown,"Markdown")}
+    <Col span={16}>
     {RenderBlock(content)}
     </Col>
-    <Col span={12}>
+    <Col span={8}>
+    {getLatexBlock(markdown,"Markdown")}
     {getLatexBlock(tableLatex,"LaTeX")}
     </Col>
     
@@ -107,6 +107,7 @@ function handleExpression(str) {
       return undefined;
     }
 }
+const topPadding={padding:"1rem 0 0 0"}
 function getLatexBlock(c,title="Code"){
   const copy=()=>{
     navigator.clipboard.writeText(c).then(() => {
@@ -117,7 +118,7 @@ function getLatexBlock(c,title="Code"){
       message.error('复制失败:', err);
     });
   }
-  return(<div style={{padding:"1rem 0 0 0"}}>
+  return(<div style={topPadding}>
     <Card style={{body:{ padding: 0 }}} title={
       <div style={horizon}>
         <div >{title}</div>
@@ -189,7 +190,7 @@ function RenderBlock(content){
     setIsModalOpen(false);
   };
   
-  return(<Card title={
+  const card=(<Card title={
   <div style={horizon}>
     <div >Word Table(Beta)</div>
     <div >
@@ -217,6 +218,9 @@ function RenderBlock(content){
         <p>按下<Text keyboard>Ctrl</Text> + <Text keyboard>=</Text>渲染 <TeX>\LaTeX</TeX> 公式</p>
       </Modal>
   </Card>)
+  return(<div style={topPadding}>
+    {card}
+  </div>)
 }
 const manual=[
   '非：~ 或 !',
@@ -267,7 +271,7 @@ function getBanner(text){
   </div>
   <div style={{textAlign:"end",fontsize:'2rem',padding:"1rem 0"}}>
     <Link href="https://github.com/57UU/truth_table_generator" >
-    <u className='githublink'>GitHub/Source Code</u>
+    <u className='githublink'>GitHub/Source Code By 57U</u>
     </Link>
     </div>
 </div>
