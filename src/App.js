@@ -96,18 +96,25 @@ ${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
   return(ResultDisplay(content, markdown,tableLatex))
 }
 
-
+let isFirstTime=true;
 function ResultDisplay(content,markdown,latex){
   const query="(min-width: 55rem)"
   const [matches, setMatches] = useState(
-    window.matchMedia(query).matches
+    !window.matchMedia(query).matches
   )
-
+  
   useEffect(() => {
     window
     .matchMedia(query)
     .addEventListener('change', e => setMatches( e.matches ));
   }, []);
+  if(isFirstTime){
+    isFirstTime=false
+    setTimeout(() => {
+      setMatches(!matches)//由于预渲染会导致这个动态加载的有点问题，因此要这样写（没找到更合适的方法）
+    }, 50);
+  }
+
 
   let displayStyle;
   if(matches){//big screen
