@@ -29,9 +29,9 @@ function App() {
           <Col flex="30rem"  style={{flexGrow: 1,}}>{getBanner("真值表计算器")}</Col>
           <Col flex="10rem"  style={{flexGrow: 1,}} className='hide-on-a-little-smaller-screens'>{getAbout()}</Col>
         </Row> 
-          
+        <Row gutter={16} style={{width:"100vw"}} className='hide-on-larger-screens'>{getManual()}</Row>
       
-      <div flex="15rem" style={{flexGrow: 1}} className='hide-on-larger-screens'>{getManual()}</div>   
+         
       <Alert 
         message="注意：在使用+或*运算符时，他们的优先级是相同的"
         type="info"
@@ -91,7 +91,7 @@ ${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
     <Col style={{flexGrow: 1,}} flex="auto">
     {RenderBlock(content)}
     </Col>
-    <Col flex="25rem" className='hide-on-smaller-screens'>
+    <Col flex="25rem" style={{width:"25rem"}} className='hide-on-smaller-screens'>
     {CodeBlock(markdown,"Markdown")}
     {CodeBlock(tableLatex,"LaTeX")}
     </Col>
