@@ -23,14 +23,14 @@ function App() {
   return (
     <div className="App" style={{width:"100%"}}>
       <Space direction="vertical" style={{width:"100vw"}}> 
-      <div  style={horizon} >
+      
         <Row gutter={16} style={{width:"100vw"}}>
           <Col flex="15rem" style={{flexGrow: 1,}} className='hide-on-smaller-screens'>{getManual()}</Col>
           <Col flex="30rem"  style={{flexGrow: 1,}}>{getBanner("真值表计算器")}</Col>
           <Col flex="10rem"  style={{flexGrow: 1,}} className='hide-on-a-little-smaller-screens'>{getAbout()}</Col>
         </Row> 
           
-      </div>
+      
       <div flex="15rem" style={{flexGrow: 1}} className='hide-on-larger-screens'>{getManual()}</div>   
       <Alert 
         message="注意：在使用+或*运算符时，他们的优先级是相同的"
@@ -91,13 +91,17 @@ ${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
     <Col style={{flexGrow: 1,}} flex="auto">
     {RenderBlock(content)}
     </Col>
-    <Col flex="25rem" style={{flexGrow: 1,}}>
+    <Col flex="25rem" className='hide-on-smaller-screens'>
     {CodeBlock(markdown,"Markdown")}
     {CodeBlock(tableLatex,"LaTeX")}
     </Col>
     
+  <Col flex="25rem" style={{flexGrow: 1,}} className='hide-on-larger-screens'>
+    {CodeBlock(markdown,"Markdown")}
+    {CodeBlock(tableLatex,"LaTeX")}
+    </Col>
   </Row>
-  
+
   )
 }
 let lastExpression=undefined;
