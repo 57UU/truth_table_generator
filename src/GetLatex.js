@@ -44,7 +44,12 @@ function GetLatex(str){
     }
 }
 function convert2latex(str){
-  str=str.replaceAll("&"," \\land ").replaceAll("|"," \\lor ").replaceAll(">"," \\rightarrow ").replaceAll("="," \\leftrightarrow ").replaceAll("~"," \\sim ")
+  str=str.replaceAll("&"," \\land ")
+    .replaceAll("|"," \\lor ")
+    .replaceAll(">"," \\rightarrow ")
+    .replaceAll("="," \\leftrightarrow ")
+    .replaceAll("~"," \\sim ")
+    .replaceAll("^"," \\oplus ")
   return str
 }
 function verify(list){
@@ -84,6 +89,7 @@ const prec={
   ">":1.5,
   "|":2,
   "&":2,
+  "^":2,
   "~":4,
   "$":5
 }
@@ -93,7 +99,8 @@ const operations={
   and:"&",
   not:"~",
   if:">",
-  immediate:"$"
+  immediate:"$",
+  exclusiveOr:"^"
 };
 function infix2postfix(exp){
     let op_stack =new Stack();
@@ -207,6 +214,10 @@ class AstNode{
     }else if(this.op==operations.equal){
       for(let i=0;i<ele1_table.length;i++){
         table.push(ele1_table[i]==ele2_table[i])
+      }
+    }else if(this.op==operations.exclusiveOr){
+      for(let i=0;i<ele1_table.length;i++){
+        table.push(((!ele1_table[i])&&ele2_table[i])||(ele1_table[i]&&(!ele2_table[i])))
       }
     }
     recorder.push({

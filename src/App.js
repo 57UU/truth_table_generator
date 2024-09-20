@@ -22,12 +22,16 @@ function App() {
 
   return (
     <div className="App" style={{width:"100%"}}>
-      <Space direction="vertical" style={{width:"100%"}}> 
-      <div style={horizon}>
-        {getManual()}
-        {getBanner("真值表计算器")}
+      <Space direction="vertical" style={{width:"100vw"}}> 
+      <div  style={horizon} >
+        <Row gutter={16} style={{width:"100vw"}}>
+          <Col flex="15rem" style={{flexGrow: 1,}} className='hide-on-smaller-screens'>{getManual()}</Col>
+          <Col flex="30rem"  style={{flexGrow: 1,}}>{getBanner("真值表计算器")}</Col>
+          <Col flex="10rem"  style={{flexGrow: 1,}} className='hide-on-a-little-smaller-screens'>{getAbout()}</Col>
+        </Row> 
+          
       </div>
-      
+      <div flex="15rem" style={{flexGrow: 1}} className='hide-on-larger-screens'>{getManual()}</div>   
       <Alert 
         message="注意：在使用+或*运算符时，他们的优先级是相同的"
         type="info"
@@ -84,10 +88,10 @@ ${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
 `.trimStart();
   }
   return(<Row gutter={16}>
-    <Col span={16}>
+    <Col style={{flexGrow: 1,}} flex="auto">
     {RenderBlock(content)}
     </Col>
-    <Col span={8}>
+    <Col flex="25rem" style={{flexGrow: 1,}}>
     {CodeBlock(markdown,"Markdown")}
     {CodeBlock(tableLatex,"LaTeX")}
     </Col>
@@ -152,7 +156,7 @@ function RenderBlock(content){
         return
       }
       const t=(
-        <table id="table1" align="center" valign="center" style={{ width: "100%",borderCollapse: "collapse",border:"1px solid black"}}>
+        <table  id="table1" align="center" valign="center" style={{ width: "100%",borderCollapse: "collapse",border:"1px solid black"}}>
           <thead>
             <tr>{content[0].map(e=><th style={{border:"1px solid black"}}>{e}</th>)}</tr>
           </thead>
@@ -208,8 +212,8 @@ function RenderBlock(content){
       </Row>
     </div>
   </div>
-  }>
-    {inner}
+  }><div className="x-scorlleable">{inner}</div>
+    
     <Modal title="Word公式说明" open={isModalOpen} onOk={handleOk} onCancel={handleOk} 
     footer={[
       <Button key="OK" type="primary"  onClick={handleOk}>
@@ -230,18 +234,37 @@ const manual=[
   '非：~ 或 !',
   "或：| 或 +",
   '与：& 或 *',
+  '异或：^',
   '蕴含：> ',
-  '等价：='
+  '等价：=',
 ]
 
-
+function getAbout(){
+  return (
+    <Card 
+    title="About"
+     bordered={true}
+     style={{ 
+      height:"100%",
+      width:"100%",
+      backgroundColor: '#aa8e05', 
+      fontSize: '1rem', 
+      body:{ padding: 0 }, // 移除Card内部padding
+      fontWeight: 'bold', // 加粗文字
+      }}>
+    <p>本页面用于生成命题逻辑公式真值表(包括子式)</p>
+    <p>支持：或/与/非/异或/蕴含（条件）</p>
+  </Card>
+  )
+}
 function getManual(){
   return (
     <Card 
     title="说明"
      bordered={true}
      style={{ 
-      width: 300 ,
+      height:"100%",
+      width:"100%",
       backgroundColor: '#1677ff', 
       fontSize: '1rem', 
       body:{ padding: 0 }, // 移除Card内部padding
@@ -253,11 +276,13 @@ function getManual(){
 }
 function getBanner(text){
   return ( <Card
+  
   style={{
     width:"100%",
-    backgroundColor: '#a0d911', // Ant Design的蓝色调
+    height:"100%",
+    backgroundColor: '#a0d911', 
     color: '#fff', // 白色文字
-    margin:"0 0 0 0.5rem",
+    //margin:"0 0 0 0.5rem",
     body:{ padding: 0 } // 移除Card内部padding
   }}
 ><div style={{height:"13rem",textAlign:"center",}}>
@@ -269,12 +294,11 @@ function getBanner(text){
     fontSize: '2rem', // 你可以根据需要调整字体大小
     fontWeight: 'bold', // 加粗文字
     padding:"4rem 0",
-    margin:"0 0 0 0.5rem",
   }}>
     {text}
   </div>
-  <div style={{textAlign:"end",fontsize:'2rem',padding:"1rem 0"}}>
-    <Link href="https://github.com/57UU/truth_table_generator" >
+  <div className="secondTitle">
+    <Link href="https://github.com/57UU/truth_table_generator" target="_blank">
     <u className='githublink'>GitHub/Source Code By 57U</u>
     </Link>
     </div>
