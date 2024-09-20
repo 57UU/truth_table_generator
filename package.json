@@ -1,6 +1,6 @@
 {
   "name": "truth_table_generator",
-
+  "homepage": "https://57UU.github.io/truth_table_generator/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
