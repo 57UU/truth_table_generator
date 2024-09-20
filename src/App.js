@@ -29,7 +29,7 @@ function App() {
           <Col flex="30rem"  style={{flexGrow: 1,}}>{getBanner("真值表计算器")}</Col>
           <Col flex="10rem"  style={{flexGrow: 1,}} className='hide-on-a-little-smaller-screens'>{getAbout()}</Col>
         </Row> 
-        <Row gutter={16} style={{width:"100vw"}} className='hide-on-larger-screens'>{getManual()}</Row>
+        <Row gutter={16} style={{width:"100vw"}} className='hide-on-larger-screens'><Col style={{flexGrow: 1,}}>{getManual()}</Col></Row>
       
          
       <Alert 
