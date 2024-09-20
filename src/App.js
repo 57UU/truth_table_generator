@@ -1,6 +1,6 @@
 import { Button,Input,Card,Typography, Alert,message, Space,Row,Col,Modal }  from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import React,{ useState,Component,useEffect } from 'react';
 import GetLatex from './GetLatex';
 import "./App.css"
 import 'katex/dist/katex.min.css';
@@ -24,12 +24,16 @@ function App() {
     <div className="App" style={{width:"100%"}}>
       <Space direction="vertical" style={{width:"100vw"}}> 
       
-        <Row gutter={16} style={{width:"100vw"}}>
-          <Col flex="15rem" style={{flexGrow: 1,}} className='hide-on-smaller-screens'>{getManual()}</Col>
-          <Col flex="30rem"  style={{flexGrow: 1,}}>{getBanner("真值表计算器")}</Col>
-          <Col flex="10rem"  style={{flexGrow: 1,}} className='hide-on-a-little-smaller-screens'>{getAbout()}</Col>
-        </Row> 
-        <Row gutter={16} style={{width:"100vw"}} className='hide-on-larger-screens'><Col style={{flexGrow: 1,}}>{getManual()}</Col></Row>
+      <Row gutter={16} style={{width:"100vw"}} className='hide-on-larger-screens'>
+          <Col style={{flexGrow: 1,}}>{getBanner("真值表计算器")}</Col>
+      </Row>
+
+      <Row gutter={16} style={{width:"100vw"}}>
+        <Col flex="15rem" style={{flexGrow: 1,}} >{getManual()}</Col>
+        <Col flex="30rem"  style={{flexGrow: 1,}} className='hide-on-smaller-screens'>{getBanner("真值表计算器")}</Col>
+        <Col flex="10rem"  style={{flexGrow: 1,}} className='hide-on-a-little-smaller-screens'>{getAbout()}</Col>
+      </Row> 
+        
       
          
       <Alert 
@@ -87,23 +91,47 @@ ${"|:---:".repeat(c.columns)}|
 ${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
 `.trimStart();
   }
-  return(<Row gutter={16}>
+
+
+  return(ResultDisplay(content, markdown,tableLatex))
+}
+
+
+function ResultDisplay(content,markdown,latex){
+  const query="(min-width: 768px)"
+  const [matches, setMatches] = useState(
+    window.matchMedia(query).matches
+  )
+
+  useEffect(() => {
+    window
+    .matchMedia(query)
+    .addEventListener('change', e => setMatches( e.matches ));
+  }, []);
+
+  let displayStyle;
+  if(matches){//big screen
+    displayStyle={width:"25rem"}
+  }else{
+    displayStyle={flexGrow: 1}
+  }
+  return(<Row gutter={16}      
+    style={{
+    flexWrap: matches? 'nowrap':"wrap", 
+    width: '100%' 
+  }}>
     <Col style={{flexGrow: 1,}} flex="auto">
     {RenderBlock(content)}
     </Col>
-    <Col flex="25rem" style={{width:"25rem"}} className='hide-on-smaller-screens'>
-    {CodeBlock(markdown,"Markdown")}
-    {CodeBlock(tableLatex,"LaTeX")}
-    </Col>
-    
-  <Col flex="25rem" style={{flexGrow: 1,}} className='hide-on-larger-screens'>
-    {CodeBlock(markdown,"Markdown")}
-    {CodeBlock(tableLatex,"LaTeX")}
+    <Col flex="25rem"
+        style={displayStyle}>
+          {CodeBlock(markdown,"Markdown")}
+          {CodeBlock(latex,"LaTeX")}
     </Col>
   </Row>
-
   )
 }
+
 let lastExpression=undefined;
 let lastValue=undefined;
 function handleExpression(str) {
@@ -202,7 +230,13 @@ function RenderBlock(content){
     setIsModalOpen(false);
   };
   
-  const card=(<Card hoverable={isHoverCard} onClick={doNothing} title={
+  const card=(<Card 
+    style={{ 
+      
+    }}
+    hoverable={isHoverCard} 
+    onClick={doNothing}
+     title={
   <div className='card-title' style={horizon}>
     <div >Word Table(Beta)</div>
     <div >
