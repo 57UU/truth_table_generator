@@ -42,5 +42,8 @@
   },
   "devDependencies": {
     "@types/clipboard": "^2.0.7"
+  },
+  "reactSnap": {
+  "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"]
   }
 }
