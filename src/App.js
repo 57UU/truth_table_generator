@@ -98,7 +98,7 @@ ${content.slice(1).map(i=>`| ${i.join(" | ")} |`).join("\n")}
 
 
 function ResultDisplay(content,markdown,latex){
-  const query="(min-width: 768px)"
+  const query="(min-width: 55rem)"
   const [matches, setMatches] = useState(
     window.matchMedia(query).matches
   )
@@ -238,7 +238,7 @@ function RenderBlock(content){
     onClick={doNothing}
      title={
   <div className='card-title' style={horizon}>
-    <div >Word Table(Beta)</div>
+    <div >Word (Beta)</div>
     <div >
       <Row gutter={16}>
         <Col span="12">
