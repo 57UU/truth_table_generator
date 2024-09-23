@@ -282,6 +282,8 @@ const manual=[
   '异或：^',
   '蕴含：> ',
   '等价：=',
+  'NOR：\\',
+  "NAND：/"
 ]
 
 function getAbout(){
