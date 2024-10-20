@@ -44,6 +44,14 @@ jobs:
           ${{ runner.OS }}-npm-cache
     - run: npm ci
     - run: CI=false npm run build
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: modify web source
+      run: python modify_source.py https://truth-table-gen.pages.dev/ /truth_table_generator/
+
     - name: Upload Pages artifact
       uses: actions/upload-pages-artifact@v2
       with:
