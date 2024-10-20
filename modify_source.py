@@ -2,7 +2,7 @@ import sys
 
 path=["./build/index.html","./build/200.html"]
 replaced=sys.argv[1]
-default=sys.argv[2] if len(sys.argv)>1 else None
+default=sys.argv[2] if len(sys.argv)>2 else None
 
 
 
