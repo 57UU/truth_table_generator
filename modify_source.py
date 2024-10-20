@@ -1,6 +1,17 @@
 import sys
+import os
 
-path=["./build/index.html","./build/200.html"]
+def find_c_files(path):
+ c_files = []
+ for root, dirs, files in os.walk(path):
+    for file in files:
+        if file.endswith(".css"):
+            c_files.append(f"{root}/{file}")
+            return c_files
+
+
+
+path=["./build/index.html","./build/200.html"]+find_c_files("./build/static/css")
 replaced=sys.argv[1]
 default=sys.argv[2] if len(sys.argv)>2 else None
 
